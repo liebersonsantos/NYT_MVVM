@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nyt_mvvm.R
-import com.example.nyt_mvvm.data.model.Book
 import kotlinx.android.synthetic.main.activity_books.*
 
 class BooksActivity : AppCompatActivity() {
@@ -19,9 +18,7 @@ class BooksActivity : AppCompatActivity() {
         toolbarMain.title = getString(R.string.books_title)
         setSupportActionBar(toolbarMain)
 
-
-
-        val viewModel: BooksViewModel = ViewModelProviders.of(this).get(BooksViewModel::class.java)
+        val viewModel: BookViewModel = ViewModelProviders.of(this).get(BookViewModel::class.java)
 
         viewModel.booksLiveData.observe(this, Observer {
 

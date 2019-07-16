@@ -12,4 +12,3 @@ interface Services {
                  @Query("list") list: String = "hardcover-fiction"
     ): Call<BookResponse>
 }
-

@@ -6,5 +6,12 @@
 
     <!-- BookDetailsActivity -->
     <string name="book_details_title_label">Title</string>
+    <string name="book_details_title">Book Details</string>
     <string name="book_description_label">Description</string>
+
+    <!--ViewModel-->
+    <string name="error_401"> Não autorizado</string>
+    <string name="error_400_generic"> Erro não tratado</string>
+    <string name="error_500_generic"> Erro Catastrófico</string>
+
 </resources>

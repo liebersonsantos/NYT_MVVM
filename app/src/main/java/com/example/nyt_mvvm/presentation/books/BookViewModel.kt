@@ -25,7 +25,8 @@ class BookViewModel: ViewModel() {
                         for (result in bookResponse.booksResults){
                             val book = Book(
                                 title = result.bookDetails[0].title,
-                                author = result.bookDetails[0].author
+                                author = result.bookDetails[0].author,
+                                description = result.bookDetails[0].description
                             )
 
                             books.add(book)
@@ -48,10 +49,10 @@ class BookViewModel: ViewModel() {
 
     fun createFakeBooks(): List<Book>{
         return listOf(
-            Book("Title 1", "Author 1"),
-            Book("Title 2", "Author 2"),
-            Book("Title 3", "Author 3"),
-            Book("Title 4", "Author 4")
+            Book("Title 1", "Author 1", "Description 1"),
+            Book("Title 2", "Author 2", "Description 2"),
+            Book("Title 3", "Author 3", "Description 3"),
+            Book("Title 4", "Author 4", "Description 4")
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.example.nyt_mvvm.presentation.books
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +37,14 @@ class BooksActivity : BaseActivity() {
                 }
             }
 
+        })
+
+        viewModel.isLoading.observe(this, Observer {
+            if (it == true){
+                progress.visibility = View.VISIBLE
+            }else {
+                progress.visibility = View.GONE
+            }
         })
 
         viewModel.viewFlipperLiveData.observe(this, Observer {

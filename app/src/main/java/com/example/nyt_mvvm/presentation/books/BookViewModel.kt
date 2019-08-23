@@ -15,13 +15,16 @@ class BookViewModel: ViewModel() {
 
     val booksLiveData: MutableLiveData<List<Book>> = MutableLiveData()
     val viewFlipperLiveData: MutableLiveData<Pair<Int, Int?>> = MutableLiveData()
+    val isLoading: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getBooks(){
 //        booksLiveData.value = createFakeBooks()
+        isLoading.value = true
         ApiService.service.getBooks().enqueue(object: Callback<BookResponse>{
             override fun onResponse(call: Call<BookResponse>, response: Response<BookResponse>) {
                 when {
                     response.isSuccessful -> {
+                        isLoading.value = false
                         val books: MutableList<Book> = mutableListOf()
 
                         response.body()?.let { bookResponse ->
@@ -43,6 +46,7 @@ class BookViewModel: ViewModel() {
 
             override fun onFailure(call: Call<BookResponse>, t: Throwable) {
                 Log.d("VIEW_MODEL", "error --> " + t.message)
+                isLoading.value = false
                 viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_500_generic )
             }
 

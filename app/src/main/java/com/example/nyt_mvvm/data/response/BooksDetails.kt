@@ -1,17 +1,15 @@
 package com.example.nyt_mvvm.data.response
 
 import com.example.nyt_mvvm.data.model.Book
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
 data class BooksDetails(
 
-    @Json(name = "title")
+    @SerializedName("title")
     val title: String,
-    @Json(name = "author")
+    @SerializedName("author")
     val author: String,
-    @Json(name = "description")
+    @SerializedName("description")
     val description: String
 ) {
     fun getBookModel() = Book(

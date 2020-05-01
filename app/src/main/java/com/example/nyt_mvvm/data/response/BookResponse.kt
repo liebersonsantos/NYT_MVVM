@@ -1,11 +1,9 @@
 package com.example.nyt_mvvm.data.response
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
-data class BookResponse (
+data class BookResponse(
 
-    @Json(name = "results")
+    @SerializedName("results")
     val booksResults: List<BooksResults>
 )

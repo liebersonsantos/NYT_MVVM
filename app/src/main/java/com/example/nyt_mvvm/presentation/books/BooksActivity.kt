@@ -56,8 +56,6 @@ class BooksActivity : BaseActivity() {
                 }
             }
 
-
-
         })
 
         viewModel.getBooks()

@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.nyt_mvvm.BuildConfig
 import com.example.nyt_mvvm.R
 import com.example.nyt_mvvm.presentation.base.BaseActivity
 import com.example.nyt_mvvm.presentation.details.BookDetailsActivity
@@ -58,7 +59,11 @@ class BooksActivity : BaseActivity() {
 
         })
 
-        viewModel.getBooks()
+        viewModel.getBookRepository(BuildConfig.API_KEY, LIST_TYPE)
+    }
+
+    companion object{
+        private const val LIST_TYPE = "hardcover-fiction"
     }
 
 }

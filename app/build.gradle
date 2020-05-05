@@ -16,6 +16,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "BASE_URL", "\"https://api.nytimes.com/svc/books/v3/\""
+        buildConfigField "String", "API_KEY", "\"8XnL5GAX4HvAkNnLMFXBkfU3vKRlG87q\""
+
     }
     buildTypes {
         release {

@@ -3,6 +3,7 @@ package com.example.nyt_mvvm.presentation.books
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.nyt_mvvm.BuildConfig
 import com.example.nyt_mvvm.R
 import com.example.nyt_mvvm.data.ApiService
 import com.example.nyt_mvvm.data.model.Book
@@ -11,24 +12,70 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BookViewModel: ViewModel() {
+class BookViewModel : ViewModel() {
 
     val booksLiveData: MutableLiveData<List<Book>> = MutableLiveData()
     val viewFlipperLiveData: MutableLiveData<Pair<Int, Int?>> = MutableLiveData()
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getBooks(){
+    private val repository = BookRepository()
+
+    fun getBooks() {
 //        booksLiveData.value = createFakeBooks()
         isLoading.value = true
-        ApiService.service.getBooks().enqueue(object: Callback<BookResponse>{
-            override fun onResponse(call: Call<BookResponse>, response: Response<BookResponse>) {
+        ApiService.service.getBooks(BuildConfig.API_KEY, LIST_TYPE)
+            .enqueue(object : Callback<BookResponse> {
+                override fun onResponse(
+                    call: Call<BookResponse>,
+                    response: Response<BookResponse>
+                ) {
+                    when {
+                        response.isSuccessful -> {
+                            isLoading.value = false
+                            val books: MutableList<Book> = mutableListOf()
+
+                            response.body()?.let { bookResponse ->
+                                for (result in bookResponse.booksResults) {
+                                    val book = result.bookDetails[0].getBookModel()
+
+                                    books.add(book)
+                                }
+                            }
+
+                            booksLiveData.value = books
+                            viewFlipperLiveData.value = Pair(VIEW_FLIPPER_BOOKS, null)
+                        }
+                        response.code() == 401 -> viewFlipperLiveData.value =
+                            Pair(VIEW_FLIPPER_ERROR, R.string.error_401)
+                        else -> viewFlipperLiveData.value =
+                            Pair(VIEW_FLIPPER_ERROR, R.string.error_400_generic)
+                    }
+
+                }
+
+                override fun onFailure(call: Call<BookResponse>, t: Throwable) {
+                    Log.d("VIEW_MODEL", "error --> " + t.message)
+                    isLoading.value = false
+                    viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_500_generic)
+                }
+
+            })
+
+    }
+
+    fun getBookRepository(apiKey: String, listType: String) {
+        repository.getBooks(apiKey, listType).enqueue(object : Callback<BookResponse>{
+            override fun onResponse(
+                call: Call<BookResponse>,
+                response: Response<BookResponse>
+            ) {
                 when {
                     response.isSuccessful -> {
                         isLoading.value = false
                         val books: MutableList<Book> = mutableListOf()
 
                         response.body()?.let { bookResponse ->
-                            for (result in bookResponse.booksResults){
+                            for (result in bookResponse.booksResults) {
                                 val book = result.bookDetails[0].getBookModel()
 
                                 books.add(book)
@@ -38,8 +85,10 @@ class BookViewModel: ViewModel() {
                         booksLiveData.value = books
                         viewFlipperLiveData.value = Pair(VIEW_FLIPPER_BOOKS, null)
                     }
-                    response.code() == 401 -> viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_401)
-                    else -> viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_400_generic)
+                    response.code() == 401 -> viewFlipperLiveData.value =
+                        Pair(VIEW_FLIPPER_ERROR, R.string.error_401)
+                    else -> viewFlipperLiveData.value =
+                        Pair(VIEW_FLIPPER_ERROR, R.string.error_400_generic)
                 }
 
             }
@@ -47,14 +96,13 @@ class BookViewModel: ViewModel() {
             override fun onFailure(call: Call<BookResponse>, t: Throwable) {
                 Log.d("VIEW_MODEL", "error --> " + t.message)
                 isLoading.value = false
-                viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_500_generic )
+                viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_500_generic)
             }
 
         })
-
     }
 
-    fun createFakeBooks(): List<Book>{
+    fun createFakeBooks(): List<Book> {
         return listOf(
             Book("Title 1", "Author 1", "Description 1"),
             Book("Title 2", "Author 2", "Description 2"),
@@ -63,9 +111,10 @@ class BookViewModel: ViewModel() {
         )
     }
 
-    companion object{
+    companion object {
         private const val VIEW_FLIPPER_BOOKS = 1
         private const val VIEW_FLIPPER_ERROR = 2
+        private const val LIST_TYPE = "hardcover-fiction"
 
     }
 }

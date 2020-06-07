@@ -1,13 +1,12 @@
 package com.example.nyt_mvvm.presentation.books
 
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nyt_mvvm.BuildConfig
 import com.example.nyt_mvvm.R
+import com.example.nyt_mvvm.data.repository.BooksRepositoryImpl
 import com.example.nyt_mvvm.presentation.base.BaseActivity
 import com.example.nyt_mvvm.presentation.details.BookDetailsActivity
 import kotlinx.android.synthetic.main.activity_books.*
@@ -21,7 +20,7 @@ class BooksActivity : BaseActivity() {
 
         setupToolbar(toolbarMain, R.string.books_title)
 
-        val viewModel: BookViewModel = ViewModelProviders.of(this).get(BookViewModel::class.java)
+        val viewModel: BookViewModel =  BookViewModel.ViewModelFactory(BooksRepositoryImpl()).create(BookViewModel::class.java)
 
         viewModel.booksLiveData.observe(this, Observer {
 
@@ -40,14 +39,6 @@ class BooksActivity : BaseActivity() {
 
         })
 
-        viewModel.isLoading.observe(this, Observer {
-            if (it == true){
-                progress.visibility = View.VISIBLE
-            }else {
-                progress.visibility = View.GONE
-            }
-        })
-
         viewModel.viewFlipperLiveData.observe(this, Observer {
             it?.let { flipper ->
                 viewFlipper.displayedChild = flipper.first
@@ -59,7 +50,7 @@ class BooksActivity : BaseActivity() {
 
         })
 
-        viewModel.getBookRepository(BuildConfig.API_KEY, LIST_TYPE)
+        viewModel.getBooks(BuildConfig.API_KEY, LIST_TYPE)
     }
 
     companion object{

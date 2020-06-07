@@ -99,11 +99,7 @@ class BookViewModelTest {
 }
 
 class MockBookRepositoryImpl(private val result: ResultCallback) : BooksRepository {
-    override fun getBooks(
-        apiKey: String,
-        listType: String,
-        resultCallback: (result: ResultCallback) -> Unit
-    ) {
+    override fun getBooks(apiKey: String, listType: String, resultCallback: (result: ResultCallback) -> Unit) {
         resultCallback(result)
     }
 

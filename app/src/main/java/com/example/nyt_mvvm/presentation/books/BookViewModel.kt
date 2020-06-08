@@ -25,10 +25,7 @@ class BookViewModel : ViewModel() {
         isLoading.value = true
         ApiService.service.getBooks(BuildConfig.API_KEY, LIST_TYPE)
             .enqueue(object : Callback<BookResponse> {
-                override fun onResponse(
-                    call: Call<BookResponse>,
-                    response: Response<BookResponse>
-                ) {
+                override fun onResponse(call: Call<BookResponse>, response: Response<BookResponse>) {
                     when {
                         response.isSuccessful -> {
                             isLoading.value = false
@@ -64,7 +61,7 @@ class BookViewModel : ViewModel() {
     }
 
     fun getBookRepository(apiKey: String, listType: String) {
-        repository.getBooks(apiKey, listType).enqueue(object : Callback<BookResponse>{
+        repository.getBooks(apiKey, listType).enqueue(object : Callback<BookResponse> {
             override fun onResponse(
                 call: Call<BookResponse>,
                 response: Response<BookResponse>

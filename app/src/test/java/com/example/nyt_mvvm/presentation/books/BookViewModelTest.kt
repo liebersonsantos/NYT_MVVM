@@ -26,8 +26,6 @@ class BookViewModelTest {
     @Mock
     private lateinit var viewFlipperLiveDataObserver: Observer<Pair<Int, Int?>>
 
-    private lateinit var viewModel: BookViewModel
-
     //this is a way to initialize mockito
 //    @Before
 //    fun setup(){
